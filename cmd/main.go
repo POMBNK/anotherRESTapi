@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	todo "github.com/POMBNK/restAPI"
+	"github.com/POMBNK/restAPI"
 	"github.com/POMBNK/restAPI/config"
 	"github.com/POMBNK/restAPI/pkg/handler"
 	"github.com/POMBNK/restAPI/pkg/repository"
