@@ -1,6 +1,6 @@
 package todo
 
-// User... Сущность пользователь. Поля полностью совпадают со структоурой БД.
+// User Сущность пользователь. Поля полностью совпадают со структурой БД.
 type User struct {
 	Id       int    `json:"-"`
 	Name     string `json:"name" binding:"required"`
