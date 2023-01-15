@@ -18,7 +18,7 @@ This project is a test with techs like **GIN,REST, JWT, Postgres** with implemen
     - [ ] Delete
 - [ ] Authorization
     - [X] Registration
-    - [ ] Authentication
+    - [X] Authentication
 - [ ] Database
     - [X] Schema
     - [X] Migration
@@ -41,5 +41,5 @@ This project is a test with techs like **GIN,REST, JWT, Postgres** with implemen
 
 ## Project setup
 ```
-will be soon here
+will be here soon
 ```
