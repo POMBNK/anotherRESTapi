@@ -12,7 +12,7 @@ This project is a test with techs like **GIN,REST, JWT, Postgres** with implemen
     - [X] SIGN-IN
     - [X] CRUD endpoints
 - [ ] CRUD
-    - [ ] Create
+    - [X] Create
     - [ ] Read
     - [ ] Update
     - [ ] Delete
@@ -38,6 +38,8 @@ This project is a test with techs like **GIN,REST, JWT, Postgres** with implemen
 | GET         | /lists/{id}/items |
 | POST        | /lists/{id}/items |
 
+## Schema:
+![Schema](https://i.imgur.com/K0s9V7T.png "Schema")
 
 ## Project setup
 ```
