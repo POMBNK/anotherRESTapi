@@ -4,6 +4,7 @@ import (
 	"crypto/sha1"
 	"errors"
 	"fmt"
+	"os"
 	"time"
 
 	todo "github.com/POMBNK/restAPI"
@@ -11,10 +12,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-// TODO: move to .env file!
 const (
-	salt       = "sagk@$#@olaed3423hgjs25dklt$^%^ghdaj"
-	sign       = "djshf#$giklahl$%kg1234y#$@kdflhgbdsaf9080"
 	expireTime = 12 * time.Hour
 )
 
@@ -49,8 +47,7 @@ func (s *AuthService) GenerateToken(username string, password string) (string, e
 		},
 		user.Id})
 
-	return token.SignedString([]byte(sign))
-
+	return token.SignedString([]byte(os.Getenv("SIGN")))
 }
 
 func (s *AuthService) ParseToken(accesstoken string) (int, error) {
@@ -58,7 +55,7 @@ func (s *AuthService) ParseToken(accesstoken string) (int, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, errors.New("invalid signing method")
 		}
-		return []byte(sign), nil
+		return []byte(os.Getenv("SIGN")), nil
 	})
 	if err != nil {
 		return 0, err
@@ -75,5 +72,5 @@ func generatePasswordHash(password string) string {
 	hash := sha1.New()
 	hash.Write([]byte(password))
 
-	return fmt.Sprintf("%x", hash.Sum([]byte(salt)))
+	return fmt.Sprintf("%x", hash.Sum([]byte(os.Getenv("SALT"))))
 }

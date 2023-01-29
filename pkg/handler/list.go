@@ -1,6 +1,7 @@
 package handler
 
 import (
+	todo "github.com/POMBNK/restAPI"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -15,8 +16,21 @@ func (h *Handler) getListById(c *gin.Context) {
 }
 
 func (h *Handler) createList(c *gin.Context) {
-	// Test middlware to parse token and get id
-	id, _ := c.Get("userId")
+	userId, err := getUserId(c)
+	if err != nil {
+		return
+	}
+	var list todo.TodoList
+	if err = c.BindJSON(&list); err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	id, err := h.services.TodoList.Create(userId, list)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
 	c.JSON(http.StatusOK, map[string]interface{}{
 		"id": id,
 	})

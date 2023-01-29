@@ -1,14 +1,20 @@
 package handler
 
 import (
+	"errors"
 	"net/http"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 )
 
-func (h *Handler) userIndentity(c *gin.Context) {
-	header := c.GetHeader("Authorization")
+const (
+	userCtx = "userId"
+	authCtx = "Authorization"
+)
+
+func (h *Handler) userIdentity(c *gin.Context) {
+	header := c.GetHeader(authCtx)
 	if header == "" {
 		newErrorResponse(c, http.StatusUnauthorized, "auth header is empty")
 		return
@@ -26,5 +32,20 @@ func (h *Handler) userIndentity(c *gin.Context) {
 		return
 	}
 
-	c.Set("userId", userId)
+	c.Set(userCtx, userId)
+}
+
+func getUserId(c *gin.Context) (int, error) {
+	id, ok := c.Get(userCtx)
+	if !ok {
+		newErrorResponse(c, http.StatusInternalServerError, "user id is empty")
+		return 0, errors.New("user id is empty")
+	}
+	intId, ok := id.(int)
+	if !ok {
+		newErrorResponse(c, http.StatusInternalServerError, "user id bad type")
+		return 0, errors.New("user id bad type")
+	}
+
+	return intId, nil
 }
