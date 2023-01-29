@@ -13,7 +13,7 @@ This project is a test with techs like **GIN,REST, JWT, Postgres** with implemen
     - [X] CRUD endpoints
 - [ ] CRUD
     - [X] Create
-    - [ ] Read
+    - [X] Read
     - [ ] Update
     - [ ] Delete
 - [ ] Authorization
