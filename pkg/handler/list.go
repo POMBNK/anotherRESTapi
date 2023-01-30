@@ -11,6 +11,9 @@ import (
 type allListsResponse struct {
 	Data []todo.TodoList `json:"data"`
 }
+type deleteListResponse struct {
+	Status string `json:"status"`
+}
 
 func (h *Handler) getAllLists(c *gin.Context) {
 	userId, err := getUserId(c)
@@ -70,5 +73,20 @@ func (h *Handler) updateList(c *gin.Context) {
 }
 
 func (h *Handler) deleteList(c *gin.Context) {
-
+	userId, err := getUserId(c)
+	if err != nil {
+		return
+	}
+	listId, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, "Bad id")
+	}
+	err = h.services.TodoList.Delete(userId, listId)
+	if err != nil {
+		newErrorResponse(c, http.StatusNoContent, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, deleteListResponse{
+		Status: "ok",
+	})
 }

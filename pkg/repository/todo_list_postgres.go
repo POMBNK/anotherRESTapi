@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"fmt"
 	todo "github.com/POMBNK/restAPI"
 	"github.com/jmoiron/sqlx"
@@ -63,4 +64,23 @@ func (r *TodoListPostgres) GetByID(userId int, listId int) (todo.TodoList, error
 	err := r.db.Get(&list, query, userId, listId)
 
 	return list, err
+}
+
+func (r *TodoListPostgres) Delete(userId int, listId int) error {
+
+	query := fmt.Sprintf(
+		"DELETE FROM %s tl USING %s ul WHERE tl.id=ul.list_id AND ul.user_id = $1 AND ul.list_id=$2",
+		todoListTable,
+		usersListsTable,
+	)
+	row, err := r.db.Exec(query, userId, listId)
+	changes, err := row.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if changes == 0 {
+		return errors.New("nothing to delete")
+	}
+	return err
 }
