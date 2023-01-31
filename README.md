@@ -14,7 +14,7 @@ This project is a test with techs like **GIN,REST, JWT, Postgres** with implemen
 - [ ] CRUD
     - [X] Create
     - [X] Read
-    - [ ] Update
+    - [X] Update
     - [X] Delete
 - [ ] Authorization
     - [X] Registration
