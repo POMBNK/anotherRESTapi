@@ -1,5 +1,7 @@
 package todo
 
+import "errors"
+
 // TodoList  Todo списки
 type TodoList struct {
 	ID          int    `json:"id" db:"id"`
@@ -27,4 +29,16 @@ type ListItem struct {
 	Id     int
 	ListId int
 	ItemId int
+}
+
+type UpdateList struct {
+	Title       *string `json:"title"`
+	Description *string `json:"description"`
+}
+
+func (u *UpdateList) Validate() error {
+	if u.Title == nil && u.Description == nil {
+		return errors.New("nothing to update")
+	}
+	return nil
 }
