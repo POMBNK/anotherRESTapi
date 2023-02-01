@@ -1,6 +1,11 @@
 package handler
 
-import "github.com/gin-gonic/gin"
+import (
+	todo "github.com/POMBNK/restAPI"
+	"github.com/gin-gonic/gin"
+	"net/http"
+	"strconv"
+)
 
 func (h *Handler) getAllItems(c *gin.Context) {
 
@@ -11,7 +16,31 @@ func (h *Handler) getItemById(c *gin.Context) {
 }
 
 func (h *Handler) createItem(c *gin.Context) {
+	userId, err := getUserId(c)
+	if err != nil {
+		return
+	}
 
+	listId, err := strconv.Atoi(c.Param("id"))
+	//TODO: Should check too look at list.go
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, "Bad id")
+	}
+
+	var item todo.TodoItem
+	if err = c.BindJSON(&item); err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	id, err := h.services.TodoItem.Create(userId, listId, item)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"id": id,
+	})
 }
 
 func (h *Handler) updateItem(c *gin.Context) {
