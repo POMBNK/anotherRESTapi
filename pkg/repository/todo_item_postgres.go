@@ -38,3 +38,18 @@ func (r *TodoItemPostgres) Create(userId int, listId int, item todo.TodoItem) (i
 
 	return itemId, tx.Commit()
 }
+
+func (r *TodoItemPostgres) GetAll(userId int, listId int) ([]todo.TodoItem, error) {
+	var items []todo.TodoItem
+
+	query := fmt.Sprintf(
+		`SELECT ti.id,ti.title,ti.description,ti.done FROM %s ti
+   			   JOIN %s li ON ti.id = li.item_id
+   			   JOIN %s ul ON ul.list_id = li.list_id WHERE li.list_id = $1 AND ul.user_id = $2`,
+		todoItemTable, listsItemsTable, usersListsTable)
+	if err := r.db.Select(&items, query, listId, userId); err != nil {
+		return nil, err
+	}
+
+	return items, nil
+}

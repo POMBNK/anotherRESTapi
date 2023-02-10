@@ -8,7 +8,23 @@ import (
 )
 
 func (h *Handler) getAllItems(c *gin.Context) {
+	userId, err := getUserId(c)
+	if err != nil {
+		return
+	}
 
+	listId, err := strconv.Atoi(c.Param("id"))
+	//TODO: Should check too look at list.go
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, "Bad id")
+	}
+
+	items, err := h.services.TodoItem.GetAll(userId, listId)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, items)
 }
 
 func (h *Handler) getItemById(c *gin.Context) {
