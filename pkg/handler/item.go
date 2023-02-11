@@ -7,6 +7,10 @@ import (
 	"strconv"
 )
 
+type deleteItemResponse struct {
+	Status string `json:"status"`
+}
+
 func (h *Handler) getAllItems(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -80,5 +84,21 @@ func (h *Handler) updateItem(c *gin.Context) {
 }
 
 func (h *Handler) deleteItem(c *gin.Context) {
+	userId, err := getUserId(c)
+	if err != nil {
+		return
+	}
 
+	itemId, err := strconv.Atoi(c.Param("id"))
+	//TODO: Should check too look at list.go
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, "Bad id")
+	}
+
+	err = h.services.TodoItem.Delete(userId, itemId)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, deleteItemResponse{"ok"})
 }
