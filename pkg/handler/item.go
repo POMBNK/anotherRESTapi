@@ -11,6 +11,10 @@ type deleteItemResponse struct {
 	Status string `json:"status"`
 }
 
+type updateItemResponse struct {
+	Status string `json:"status"`
+}
+
 func (h *Handler) getAllItems(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -80,7 +84,32 @@ func (h *Handler) createItem(c *gin.Context) {
 }
 
 func (h *Handler) updateItem(c *gin.Context) {
+	userId, err := getUserId(c)
+	if err != nil {
+		return
+	}
 
+	itemId, err := strconv.Atoi(c.Param("id"))
+	//TODO: Should check if id exists in db already. If it not - abort.
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, "Bad id")
+	}
+
+	var inputUpdate todo.UpdateItem
+
+	if err = c.BindJSON(&inputUpdate); err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	err = h.services.TodoItem.Update(userId, itemId, inputUpdate)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, updateItemResponse{
+		Status: "ok",
+	})
 }
 
 func (h *Handler) deleteItem(c *gin.Context) {
