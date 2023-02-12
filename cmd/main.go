@@ -1,7 +1,10 @@
 package main
 
 import (
+	"context"
 	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/POMBNK/restAPI"
 	"github.com/POMBNK/restAPI/config"
@@ -40,7 +43,24 @@ func main() {
 	handlers := handler.NewHandler(services)
 
 	srv := new(todo.Server)
-	if err := srv.Run(cfg.Server.Port, handlers.InitRoutes()); err != nil {
-		logrus.Fatalf("error while running server %s", err)
+	go func() {
+		if err := srv.Run(cfg.Server.Port, handlers.InitRoutes()); err != nil {
+			logrus.Fatalf("error while running server %s", err)
+		}
+	}()
+
+	logrus.Println("Service started")
+
+	quit := make(chan os.Signal)
+	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
+	<-quit
+
+	logrus.Println("Service shutting sown")
+
+	if err := srv.Shutdown(context.Background()); err != nil {
+		logrus.Errorf("error ocured on server shutting down: %s", err.Error())
+	}
+	if err := db.Close(); err != nil {
+		logrus.Errorf("error ocured on db connection closed: %s", err.Error())
 	}
 }
