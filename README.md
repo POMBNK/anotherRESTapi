@@ -11,15 +11,15 @@ This project is a test with techs like **GIN,REST, JWT, Postgres** with implemen
     - [X] SIGN-UP
     - [X] SIGN-IN
     - [X] CRUD endpoints
-- [ ] CRUD
+- [X] CRUD
     - [X] Create
     - [X] Read
     - [X] Update
     - [X] Delete
-- [ ] Authorization
+- [X] Authorization
     - [X] Registration
     - [X] Authentication
-- [ ] Database
+- [X] Database
     - [X] Schema
     - [X] Migration
 - [ ] Quick setup
