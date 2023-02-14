@@ -1,34 +1,34 @@
-version: '3.3'
+version: '2.13'
+
 services:
-  db:
-    image: postgres
-    networks:
-      new:
-        aliases:
-          - database
-    environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: qwerty
+  rest-api:
+    restart: always
+    build: ./
+    command: ./rest-api
     ports:
-      - "5432"
-    healthcheck:
-      test: pg_isready -U mydbuser -d mydbname
-      interval: 10s
-      timeout: 3s
-      retries: 5
+      - 8080:8080
+    depends_on:
+      - db
+    environment:
+      - DB_PASSWORD=qwerty
+
+  db:
+    restart: always
+    image: postgres:latest
+    volumes:
+      - ./.database/postgres/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=qwerty
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+    ports:
+      - 5436:5432
 
   migrate:
     image: migrate/migrate
-    networks:
-      - new
-    volumes:
-      - .:/migrations
-    command: ["-path", "/migrations", "-database",  "postgres://mydbuser:mydbpwd@database:5432/mydbname?sslmode=disable", "up", "3"]
-    links: 
-      - db
     depends_on:
       - db
-networks:
-      new:
-
+    volumes:
+      - ./schema:/database
+    command:
+      [ "-path", "/database", "-database",  "postgres://postgres:qwerty@db:5432/postgres?sslmode=disable", "up" ]
