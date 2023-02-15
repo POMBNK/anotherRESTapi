@@ -22,9 +22,8 @@ This project is a test with techs like **GIN,REST, JWT, Postgres** with implemen
 - [X] Database
     - [X] Schema
     - [X] Migration
-- [ ] Quick setup
-    - [ ] Makefile
-    - [ ] Docker image
+- [X] Quick setup
+    - [X] Docker image
 
 ## CRUD endpoints:
 
@@ -42,6 +41,21 @@ This project is a test with techs like **GIN,REST, JWT, Postgres** with implemen
 ![Schema](https://i.imgur.com/K0s9V7T.png "Schema")
 
 ## Project setup
+
+### Create your own .env file in root with params:
+
 ```
-will be here soon
+DB_PASSWORD=<your db password, must compare with password in docker-compose.yml>
+SALT=<your salt for password cash>
+SIGN=<your sign for JWT token>
+```
+### Start command with bash to build and run app
+
+```
+docker-compose up --build
+```
+### Start command with bash to run app
+
+```
+docker-compose up -d
 ```
