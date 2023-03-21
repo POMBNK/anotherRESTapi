@@ -24,9 +24,12 @@ This project is a test with techs like **GIN,REST, JWT, Postgres** with implemen
     - [X] Migration
 - [X] Quick setup
     - [X] Docker image
+    - [X] Docker compose
+- [X] Swagger documentation
+    - Check at /swagger
 
 ## CRUD endpoints:
-
+### All api documentation check at localhost:8080/swagger
 | HTTP Method | Endpoint          |
 |-------------|-------------------|
 | GET         | /lists            |
