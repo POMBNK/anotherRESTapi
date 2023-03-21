@@ -1,8 +1,11 @@
 package handler
 
 import (
+	_ "github.com/POMBNK/restAPI/docs"
 	"github.com/POMBNK/restAPI/pkg/service"
 	"github.com/gin-gonic/gin"
+	"github.com/swaggo/files"       // swagger embed files
+	"github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
 
 type Handler struct {
@@ -16,6 +19,9 @@ func NewHandler(services *service.Service) *Handler {
 // InitRoutes эндпоинты для обработки запросов
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
+
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 	auth := router.Group("/auth")
 	{
 		auth.POST("/sign-up", h.signUp)

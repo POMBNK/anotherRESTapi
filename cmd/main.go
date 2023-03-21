@@ -6,7 +6,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/POMBNK/restAPI"
+	todo "github.com/POMBNK/restAPI"
 	"github.com/POMBNK/restAPI/config"
 	"github.com/POMBNK/restAPI/pkg/handler"
 	"github.com/POMBNK/restAPI/pkg/repository"
@@ -15,6 +15,17 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
 )
+
+// @title anotherRestAPI
+// @version 1.0
+// @description Documentation to my CRUD application in Go!
+
+// @host localhost:8080
+// @BasePath /
+
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 
 func main() {
 	logrus.SetFormatter(new(logrus.JSONFormatter))
@@ -55,7 +66,7 @@ func main() {
 	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
 	<-quit
 
-	logrus.Println("Service shutting sown")
+	logrus.Println("Service shutting down")
 
 	if err := srv.Shutdown(context.Background()); err != nil {
 		logrus.Errorf("error ocured on server shutting down: %s", err.Error())
